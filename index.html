@@ -10,12 +10,29 @@
     #canvas {
       border: 1px solid #fff;
     }
+    #controles {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+    button {
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+      margin: 5px;
+    }
   </style>
 </head>
 <body>
   <canvas id="canvas" width="800" height="600"></canvas>
+  <div id="controles">
+    <button id="arriba">&#8593;</button>
+    <button id="abajo">&#8595;</button>
+    <button id="izquierda">&#8592;</button>
+    <button id="derecha">&#8594;</button>
+    <button id="disparar">&#128481;</button>
+  </div>
   <script>
-    // Variables del juego
     let canvas = document.getElementById('canvas');
     let ctx = canvas.getContext('2d');
     let puntuacion = 0;
@@ -27,25 +44,32 @@
     };
     let balas = [];
 
-    // Función para iniciar el juego
-    function iniciarJuego() {
-      ctx.fillStyle = '      
-      ctx.font = '24px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('Bienvenido y diviértete!', canvas.width / 2, canvas.height / 2);
-      setTimeout(() => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        crearSerpientes();
-        dibujarCazador();
-        dibujarPuntuacion();
-        setInterval(() => {
-          actualizarJuego();
-        }, 1000 / 60);
-      }, 2000);
-    }
+    let arriba = document.getElementById('arriba');
+    let abajo = document.getElementById('abajo');
+    let izquierda = document.getElementById('izquierda');
+    let derecha = document.getElementById('derecha');
+    let disparar = document.getElementById('disparar');
 
-                                     
+    arriba.addEventListener('click', () => {
+      cazador.y -= cazador.velocidad;
+    });
+    abajo.addEventListener('click', () => {
+      cazador.y += cazador.velocidad;
+    });
+    izquierda.addEventListener('click', () => {
+      cazador.x -= cazador.velocidad;
+    });
+    derecha.addEventListener('click', () => {
+      cazador.x += cazador.velocidad;
+    });
+    disparar.addEventListener('click', () => {
+      balas.push({
+        x: cazador.x,
+        y: cazador.y,
+        velocidad: 10
+      });
+    });
+
     function crearSerpientes() {
       for (let i = 0; i < 10; i++) {
         serpientes.push({
@@ -56,22 +80,19 @@
       }
     }
 
-                                       
     function dibujarCazador() {
-      ctx.fillStyle = '#fff';
+      ctx.fillStyle = '      
       ctx.fillRect(cazador.x, cazador.y, 20, 20);
     }
 
-    // Función para dibujar la puntuación
     function dibujarPuntuacion() {
-      ctx.fillStyle = '      
+      ctx.fillStyle = '#fff';
       ctx.font = '18px Arial';
       ctx.textAlign = 'left';
       ctx.textBaseline = 'top';
       ctx.fillText(`Puntuación: ${puntuacion}`, 10, 10);
     }
 
-                                        
     function actualizarJuego() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       dibujarCazador();
@@ -81,19 +102,17 @@
       verificarColisiones();
     }
 
-                                              
     function actualizarSerpientes() {
       serpientes.forEach((serpiente) => {
         serpiente.x += serpiente.velocidad;
         if (serpiente.x > canvas.width || serpiente.x < 0) {
           serpiente.velocidad = -serpiente.velocidad;
         }
-        ctx.fillStyle = '#0f0';
+        ctx.fillStyle = '      
         ctx.fillRect(serpiente.x, serpiente.y, 20, 20);
       });
     }
 
-    // Función para actualizar las balas
     function actualizarBalas() {
       balas.forEach((bala) => {
         bala.x += bala.velocidad;
@@ -102,7 +121,6 @@
       });
     }
 
-    // Función para verificar colisiones
     function verificarColisiones() {
       serpientes.forEach((serpiente) => {
         balas.forEach((bala) => {
@@ -112,21 +130,7 @@
             balas.splice(balas.indexOf(bala), 1);
           }
         });
-        if (serpiente.x > cazador.x && serpiente.x < cazador.x + 20 && serpiente.y > cazador.y && serpiente.y < cazador.y + 20) {
-          reiniciarJuego();
-        }
       });
     }
 
-    // Función para reiniciar el juego
-    function reiniciarJuego() {
-      puntuacion = 0;
-      serpientes = [];
-      balas = [];
-      cazador.x = canvas.width / 2;
-      cazador.y = canvas.height / 2;
-      iniciarJuego();
-    }
-
-    // Iniciar el juego
-    iniciarJ
+    crearSerp
