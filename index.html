@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cazador de Serpientes</title>
+  <style>
+    body {
+      background-color: #000;
+      font-family: Arial, sans-serif;
+    }
+    #canvas {
+      border: 1px solid #fff;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="800" height="600"></canvas>
+  <script>
+    // Variables del juego
+    let canvas = document.getElementById('canvas');
+    let ctx = canvas.getContext('2d');
+    let puntuacion = 0;
+    let serpientes = [];
+    let cazador = {
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      velocidad: 5
+    };
+    let balas = [];
+
+    // Función para iniciar el juego
+    function iniciarJuego() {
+      ctx.fillStyle = '      
+      ctx.font = '24px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('Bienvenido y diviértete!', canvas.width / 2, canvas.height / 2);
+      setTimeout(() => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        crearSerpientes();
+        dibujarCazador();
+        dibujarPuntuacion();
+        setInterval(() => {
+          actualizarJuego();
+        }, 1000 / 60);
+      }, 2000);
+    }
+
+                                     
+    function crearSerpientes() {
+      for (let i = 0; i < 10; i++) {
+        serpientes.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          velocidad: Math.random() * 2 + 1
+        });
+      }
+    }
+
+                                       
+    function dibujarCazador() {
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(cazador.x, cazador.y, 20, 20);
+    }
+
+    // Función para dibujar la puntuación
+    function dibujarPuntuacion() {
+      ctx.fillStyle = '      
+      ctx.font = '18px Arial';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+      ctx.fillText(`Puntuación: ${puntuacion}`, 10, 10);
+    }
+
+                                        
+    function actualizarJuego() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      dibujarCazador();
+      dibujarPuntuacion();
+      actualizarSerpientes();
+      actualizarBalas();
+      verificarColisiones();
+    }
+
+                                              
+    function actualizarSerpientes() {
+      serpientes.forEach((serpiente) => {
+        serpiente.x += serpiente.velocidad;
+        if (serpiente.x > canvas.width || serpiente.x < 0) {
+          serpiente.velocidad = -serpiente.velocidad;
+        }
+        ctx.fillStyle = '#0f0';
+        ctx.fillRect(serpiente.x, serpiente.y, 20, 20);
+      });
+    }
+
+    // Función para actualizar las balas
+    function actualizarBalas() {
+      balas.forEach((bala) => {
+        bala.x += bala.velocidad;
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(bala.x, bala.y, 5, 5);
+      });
+    }
+
+    // Función para verificar colisiones
+    function verificarColisiones() {
+      serpientes.forEach((serpiente) => {
+        balas.forEach((bala) => {
+          if (bala.x > serpiente.x && bala.x < serpiente.x + 20 && bala.y > serpiente.y && bala.y < serpiente.y + 20) {
+            puntuacion++;
+            serpientes.splice(serpientes.indexOf(serpiente), 1);
+            balas.splice(balas.indexOf(bala), 1);
+          }
+        });
+        if (serpiente.x > cazador.x && serpiente.x < cazador.x + 20 && serpiente.y > cazador.y && serpiente.y < cazador.y + 20) {
+          reiniciarJuego();
+        }
+      });
+    }
+
+    // Función para reiniciar el juego
+    function reiniciarJuego() {
+      puntuacion = 0;
+      serpientes = [];
+      balas = [];
+      cazador.x = canvas.width / 2;
+      cazador.y = canvas.height / 2;
+      iniciarJuego();
+    }
+
+    // Iniciar el juego
+    iniciarJ
