@@ -21,11 +21,25 @@
       font-size: 24px;
       margin: 5px;
     }
+    #inicio {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: #fff;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <canvas id="canvas" width="800" height="600"></canvas>
-  <div id="controles">
+  <canvas id="canvas" width="800" height="600" style="display: none;"></canvas>
+  <button id="inicio">Inicio</button>
+  <div id="controles" style="display: none;">
     <button id="arriba">&#8593;</button>
     <button id="abajo">&#8595;</button>
     <button id="izquierda">&#8592;</button>
@@ -44,11 +58,22 @@
     };
     let balas = [];
 
+    let inicio = document.getElementById('inicio');
     let arriba = document.getElementById('arriba');
     let abajo = document.getElementById('abajo');
     let izquierda = document.getElementById('izquierda');
     let derecha = document.getElementById('derecha');
     let disparar = document.getElementById('disparar');
+
+    inicio.addEventListener('click', () => {
+      inicio.style.display = 'none';
+      canvas.style.display = 'block';
+      document.getElementById('controles').style.display = 'block';
+      crearSerpientes();
+      setInterval(() => {
+        actualizarJuego();
+      }, 1000 / 60);
+    });
 
     arriba.addEventListener('click', () => {
       cazador.y -= cazador.velocidad;
@@ -108,29 +133,4 @@
         if (serpiente.x > canvas.width || serpiente.x < 0) {
           serpiente.velocidad = -serpiente.velocidad;
         }
-        ctx.fillStyle = '      
-        ctx.fillRect(serpiente.x, serpiente.y, 20, 20);
-      });
-    }
-
-    function actualizarBalas() {
-      balas.forEach((bala) => {
-        bala.x += bala.velocidad;
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(bala.x, bala.y, 5, 5);
-      });
-    }
-
-    function verificarColisiones() {
-      serpientes.forEach((serpiente) => {
-        balas.forEach((bala) => {
-          if (bala.x > serpiente.x && bala.x < serpiente.x + 20 && bala.y > serpiente.y && bala.y < serpiente.y + 20) {
-            puntuacion++;
-            serpientes.splice(serpientes.indexOf(serpiente), 1);
-            balas.splice(balas.indexOf(bala), 1);
-          }
-        });
-      });
-    }
-
-    crearSerp
+        ctx.fillStyle
